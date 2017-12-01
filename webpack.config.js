@@ -27,7 +27,7 @@ let config = {
 				watch : dev,
 				output:{
 					path: dev ? path.resolve('./dist') : path.resolve('./dist'),
-					filename:dev ? '[name].js' : '[name].[chunkhash:8].js'
+					filename:dev ? '[name].js' : '[name].js'
 				},
 				devtool : dev ? 'cheap-module-eval-source-map' : false,
 				module : {
@@ -47,20 +47,27 @@ let config = {
 					          fallback: "style-loader",
 					          use: [...cssloaders,'sass-loader']
 					        })
-						}
+						},
+						{
+					        test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+					        loader: 'url-loader',
+					        options: {
+					          limit: 10000
+					        }
+					     }
 					]
 				},
 				plugins : [
 					new ExtractTextPlugin({
-						filename: dev ? '[name].css' : '[name].[contenthash:8].css',
+						filename: dev ? '[name].css' : '[name].css',
 						// disable: dev
-					})
+					}),
 				]
 			}
 
 if(!dev){
 	config.plugins.push(new uglifyJSPlugin()),
-	config.plugins.push(new CleanWebpackPlugin(['dist'],{
+	config.plugins.push(new CleanWebpackPlugin(['dist/*'],{
 		root:     path.resolve('./'),
 		verbose : true
 	}))
